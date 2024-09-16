@@ -12,7 +12,7 @@ Docker is needed for this env setup.
 
 Services that need to be run.
 - kakfa
-- postgres
+- mysql
 
 Commands to set up Kafka
 ```
@@ -41,6 +41,7 @@ the database schemas changes would be maintained in their own repo.
 First, the data node project needs to be start. 
 ```
 cd data
+npm i
 npm start
 ```
 
@@ -57,3 +58,11 @@ cd api
 go mod tidy
 go run cmd/main.go
 ```
+
+## API Endpoints
+No auth require
+* [Get Storms](storms.md) : `GET /storms`
+
+## Configuration changes
+If any env variables changes are needed, each repo has a dedicated .env file. Most of the Kafka
+topics, broker settings, and DB settings can be there.
