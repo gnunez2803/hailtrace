@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -15,16 +14,16 @@ import (
 )
 
 func main() {
+	logger, _ := zap.NewProduction()
+	defer logger.Sync()
 	err := godotenv.Load()
 	if err != nil {
-		fmt.Println(err)
+		logger.Error(err.Error())
 		os.Exit(1)
 	}
 
 	// Create a new Gin router
 	router := gin.Default()
-	logger, _ := zap.NewProduction()
-	defer logger.Sync()
 	dbRepo, err := weather.NewMysqlRepository(os.Getenv("DATABASE_URL"))
 	if err != nil {
 		logger.Error("Unable to initialize DB connection.",
