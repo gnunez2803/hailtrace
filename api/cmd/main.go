@@ -47,8 +47,6 @@ func main() {
 		dateStr := c.Query("date")
 
 		location := c.Query("location")
-		fmt.Println(location)
-
 		_, err := time.Parse("2006-01-02", dateStr)
 		if dateStr == "" || err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{

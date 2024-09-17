@@ -165,7 +165,7 @@ func (m ModelsRepo) fetchWindStorms(location string, date string) ([]WindEvent, 
 	defer rows.Close()
 	for rows.Next() {
 		var result WindEvent
-		var eventTimeStr string // Use string for scanning initially
+		var eventTimeStr string
 		err = rows.Scan(
 			&eventTimeStr,
 			&result.Speed,
@@ -211,7 +211,7 @@ func (m ModelsRepo) fetchTornadoStorms(location string, date string) ([]TornadoE
 	defer rows.Close()
 	for rows.Next() {
 		var result TornadoEvent
-		var eventTimeStr string // Use string for scanning initially
+		var eventTimeStr string
 		err = rows.Scan(
 			&eventTimeStr,
 			&result.FScale,

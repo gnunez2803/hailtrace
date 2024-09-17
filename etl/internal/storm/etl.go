@@ -99,7 +99,7 @@ func (is InvalidStorm) GetType() string {
 
 func standardizeEventTime(timeStr string, eventDate time.Time) (int64, error) {
 	var eventTime int64
-	if len(timeStr) < 4 {
+	if len(timeStr) != 4 {
 		return 0, errors.New("Time string must be at least 4 characters long (HHMM)")
 	}
 	hour, err := strconv.Atoi((timeStr[:2]))

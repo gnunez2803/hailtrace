@@ -1,52 +1,43 @@
 package storm
 
-import "testing"
+import (
+	"testing"
+	"time"
 
-func TestMarshalJson(t *testing.T) {
-	tests := []struct {
-		name    string
-		input   WeatherData
-		want    string
-		wantErr bool
-	}{
+	"github.com/stretchr/testify/assert"
+)
+
+type testCase struct {
+	hourMinute     string
+	argDate        time.Time
+	errExpected    bool
+	errMsg         string
+	expectedResult int64
+}
+
+func TestStandardizeEventTime(t *testing.T) {
+	tests := []testCase{
 		{
-			name: "TornadoStorm",
-			input: TornadoStorm{
-				FScale: "100",
-			},
-			want:    `{"id":"T1","wind":150}`,
-			wantErr: false,
+			hourMinute:     "1233",
+			argDate:        time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+			errExpected:    false,
+			expectedResult: int64(1704112380),
 		},
 		{
-			name:    "HailStorm",
-			input:   HailStorm{ID: "H1", Size: 5},
-			want:    `{"id":"H1","size":5}`,
-			wantErr: false,
-		},
-		{
-			name:    "WindStorm",
-			input:   WindStorm{ID: "W1", Speed: 60},
-			want:    `{"id":"W1","speed":60}`,
-			wantErr: false,
-		},
-		{
-			name:    "InvalidStorm",
-			input:   InvalidStorm{},
-			want:    "",
-			wantErr: true,
+			hourMinute:     "123344",
+			argDate:        time.Date(2024, 2, 1, 0, 0, 0, 0, time.UTC),
+			errExpected:    true,
+			errMsg:         "Time string must be at least 4 characters long (HHMM)",
+			expectedResult: int64(0),
 		},
 	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := MarshalJson(tt.input)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("MarshalJson() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if string(got) != tt.want {
-				t.Errorf("MarshalJson() = %v, want %v", string(got), tt.want)
-			}
-		})
+	for _, tc := range tests {
+		result, err := standardizeEventTime(tc.hourMinute, tc.argDate)
+		assert.Equal(t, result, tc.expectedResult)
+		if tc.errExpected {
+			assert.EqualError(t, err, tc.errMsg)
+		} else {
+			assert.Equal(t, err, nil)
+		}
 	}
 }
