@@ -8,14 +8,14 @@ This system uses three services:
 ![alt text](high-level-diagram.png "High Level")
 
 ## Setup
+Docker, Golang, npm, and node are needed for this env setup. 
+
 Golang Version
 - go1.21.4
 
 Node JS
 - npm 10.7.0
 - node 18.20.4
-
-Docker is needed for this env setup. 
 
 Services that need to be run.
 - kakfa
